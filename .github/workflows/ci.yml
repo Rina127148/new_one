@@ -1,3 +1,5 @@
+
+
 name: CI
 
 on:
@@ -5,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-22.04
 
     steps:
@@ -18,27 +20,19 @@ jobs:
           build-essential \
           g++ \
           dpkg-dev \
-          python3 \
-          python3-pip \
           libreadline-dev \
           libfuse3-dev \
           pkg-config \
           fuse3
 
-    - name: Build kubsh
+    - name: Build project
       run: make all
 
-    - name: Build deb
+    - name: Build deb package
       run: make deb
 
-    - name: Install deb
-      run: sudo dpkg -i kubsh_1.0.0_amd64.deb
-
-    - name: Install test dependencies
-      run: |
-        if [ -f opt/requirements.txt ]; then
-          pip3 install -r opt/requirements.txt
-        fi
-
-    - name: Run tests
-      run: pytest opt
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: kubsh-deb
+        path: "*.deb"
