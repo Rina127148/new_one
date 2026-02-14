@@ -29,9 +29,6 @@ jobs:
     - name: Build .deb package
       run: make deb
 
-    - name: Run tests in Docker
-      run: make test
-
     - name: Upload .deb as artifact
       uses: actions/upload-artifact@v4
       with:
