@@ -1,17 +1,16 @@
-
-
-name: CI
+name: CI/CD Kubsh
 
 on:
   push:
     branches: [ main ]
+  pull_request:
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-22.04
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Install dependencies
       run: |
@@ -19,20 +18,23 @@ jobs:
         sudo apt install -y \
           build-essential \
           g++ \
-          dpkg-dev \
-          libreadline-dev \
-          libfuse3-dev \
           pkg-config \
-          fuse3
+          libfuse3-dev \
+          libreadline-dev \
+          dpkg-dev \
+          docker.io
 
-    - name: Build project
+    - name: Build kubsh
       run: make all
 
-    - name: Build deb package
+    - name: Build .deb package
       run: make deb
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v3
+    - name: Run tests in Docker
+      run: make test
+
+    - name: Upload .deb as artifact
+      uses: actions/upload-artifact@v4
       with:
         name: kubsh-deb
-        path: "*.deb"
+        path: kubsh_1.0.0_amd64.deb
