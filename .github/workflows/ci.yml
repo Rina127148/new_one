@@ -22,7 +22,6 @@ jobs:
           libfuse3-dev \
           libreadline-dev \
           dpkg-dev \
-          docker.io
 
     - name: Build kubsh
       run: make all
