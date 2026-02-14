@@ -41,8 +41,4 @@ jobs:
         fi
 
     - name: Run tests
-      run: |
-        if [ -f opt/check.sh ]; then
-          chmod +x opt/check.sh
-          ./opt/check.sh
-        fi
+      run: pytest opt
